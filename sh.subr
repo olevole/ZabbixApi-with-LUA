@@ -1,0 +1,10 @@
+get_host_groups() {
+	curl -s -i -X POST -H 'Content-Type: application/json-rpc' -d '{"jsonrpc":"2.0","method": "hostgroup.get","params": {"output": "extend", "sortfield": "name"},"auth":"superpass","id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php | sed 's/\(^"\|"$\)//g'
+}
+
+get_templates() {
+	curl -s -i -X POST -H 'Content-Type: application/json-rpc' -d '{"jsonrpc": "2.0", "method": "template.get","params": {"output": "extend", "sortfield": "host"},"auth":"superpass","id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^host"/ {print $2}' | sed 's/(^"|"$)//g'
+}
+
+get_host_groups
+get_templates
