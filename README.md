@@ -1,5 +1,5 @@
 # ZabbixApi-with-LUA
-Operate with Zabbix API via LUA script
+Primitives for operating data with ZabbixAPI via LUA script
 
 
 # Install FreeBSD dependency:
