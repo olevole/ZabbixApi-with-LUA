@@ -6,5 +6,20 @@ get_templates() {
 	curl -s -i -X POST -H 'Content-Type: application/json-rpc' -d '{"jsonrpc": "2.0", "method": "template.get","params": {"output": "extend", "sortfield": "host"},"auth":"superpass","id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php | sed -e 's/[{}]/''/g' | awk -v RS=',"' -F: '/^host"/ {print $2}' | sed 's/(^"|"$)//g'
 }
 
+add_node() {
+
+	# without templates
+	#curl -i -X POST -H 'Content-Type: application/json-rpc' -d '{"jsonrpc":"2.0","method":"host.create","params":{"host":"myhost.my.domain","interfaces":[{"type":1,"main":1,"ip":"10.10.10.10","dns":"myhost.my.domain","port":10050,"useip":1}],"groups": [ {"groupid":"2"} ],"templates":[]},"auth":"mypass","id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php
+
+	# multiple templates
+	curl -i -X POST -H 'Content-Type: application/json-rpc' -d '{"jsonrpc":"2.0","method":"host.create","params":{"host":"myhost.my.domain","interfaces":[{"type":1,"main":1,"ip":"10.10.10.10","dns":"myhost.my.domain","port":10050,"useip":1}],"groups": [ {"groupid":"2"} ],"templates": [ {"templateid": "10104" }, {"templateid": "10001" } ] },"auth":"mypass","id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php
+}
+
+del_node() {
+	curl -i -X POST -H 'Content-Type: application/json-rpc' -d '{ "jsonrpc":"2.0", "method":"host.delete", "params": [ "10446" ], "auth":"mypass", "id":0}' http://zabbix.my.domain/zabbix/api_jsonrpc.php
+}
+
 get_host_groups
 get_templates
+add_node
+del_node
